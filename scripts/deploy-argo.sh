@@ -2,8 +2,7 @@
 
 ARGO_CHART_VERSION="5.51.0"
 ARGO_APP_NAME="argocd-helm"
-ARGO_NAMESPACE="argocd"
-ARGO_HELM_CHART_PATH="https://github.com/dafywinf/argocd-deployment/blob/main/argo-apps/base/argocd-helm.yaml"
+ARGO_HELM_CHART_PATH="https://raw.githubusercontent.com/dafywinf/argocd-deployment/refs/heads/main/argo-apps/base/argocd-helm.yaml"
 
 message() {
   echo -e "\n######################################################################"
@@ -23,8 +22,8 @@ installArgoCD() {
   # Install chart
   helm repo add argo https://argoproj.github.io/argo-helm
   helm repo update
-  helm uninstall $ARGO_APP_NAME --namespace=$ARGO_NAMESPACE
-  helm install $ARGO_APP_NAME argo/argo-cd --create-namespace --namespace=$ARGO_NAMESPACE --version $ARGO_CHART_VERSION \
+  helm uninstall $ARGO_APP_NAME --namespace=argocd
+  helm install $ARGO_APP_NAME argo/argo-cd --create-namespace --namespace=argocd --version $ARGO_CHART_VERSION \
     --set fullnameOverride=argocd \
     --set applicationSet.enabled=false \
     --set notifications.enabled=false \
@@ -39,7 +38,7 @@ setupSelfManagedArgoCD() {
   message ">>> Awaiting ArgoCD to sync..."
   export ARGOCD_PWD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
   until argocd login --core --username admin --password $ARGOCD_PWD --insecure; do :; done
-  kubectl config set-context --current --namespace=$ARGO_NAMESPACE
+  kubectl config set-context --current --namespace=argocd
   until argocd app sync $ARGO_APP_NAME; do echo "awaiting argocd to be sync..." && sleep 10; done
   kubectl -n argocd rollout status deployment/argocd-repo-server
 }
@@ -52,8 +51,8 @@ installArgoApplications() {
 }
 
 verifyDependencies
-#installArgoCD
-setupSelfManagedArgoCD
+installArgoCD
+#setupSelfManagedArgoCD
 # installArgoApplications
 
 #message ">>> username: 'admin', password: '$ARGOCD_PWD'"

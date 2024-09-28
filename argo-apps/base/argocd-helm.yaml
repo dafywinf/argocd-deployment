@@ -5,8 +5,8 @@ metadata:
   namespace: argocd
 
   # Add this finalizer ONLY if you want these to cascade delete (A cascade delete, deletes both the app and its resources, rather than only the app.)
-  # finalizers:
-  #   - resources-finalizer.argocd.argoproj.io
+  #finalizers:
+  #  - resources-finalizer.argocd.argoproj.io
 
 spec:
   project: default
@@ -86,7 +86,7 @@ spec:
 
         ## DEX ##
         dex:
-          enabled: true
+          enabled: false
           metrics:
             enabled: true
             serviceMonitor:
@@ -183,10 +183,10 @@ spec:
           #     memory: 512Mi
 
           # GKE Ingress
-          service:
-            annotations:
-              cloud.google.com/neg: '{"ingress": true}'
-              cloud.google.com/backend-config: '{"default": "backend-config-argocd"}'
+          #service:
+          #  annotations:
+          #    cloud.google.com/neg: '{"ingress": true}'
+          #    cloud.google.com/backend-config: '{"default": "backend-config-argocd"}'
           metrics:
             enabled: true
             serviceMonitor:
