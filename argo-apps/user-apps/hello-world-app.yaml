@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: user-apps
+  name: hello-world-app
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/dafywinf/argocd-deployment
     targetRevision: HEAD
-    path: argo-apps/user-apps
+    path: argo-apps/hello-world
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: hello-world
   syncPolicy:
     automated:
       prune: true

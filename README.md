@@ -147,6 +147,39 @@ argocd app delete guestbook --yes
 kubectl delete namespace guestbook
 ```
 
+## App-of-Apps Example
+
+Deploys:
+
+* Echo App
+* Guestbook UI App
+* Hello World App
+
+```bash
+ argocd app create root-app \
+  --repo https://github.com/dafywinf/argocd-deployment \
+  --path argo-apps \
+  --dest-server https://kubernetes.default.svc \
+  --dest-namespace argocd \
+  --sync-policy automated --upsert
+```
+
+The above command will create the `root-app` ArgoCD Application, which points to the `argo-apps` directory within the
+Git repository. This directory contains the `user-apps.yaml` file, which defines another ArgoCD Application called
+`user-apps`.
+
+The `user-apps` Application, in turn, monitors the `argo-apps/user-apps` directory, which contains application
+definitions for the `echo-app`, `hello-world-app`, and `guestbook-ui-app`. Each of these applications monitors its
+respective directory within `argo-apps`, where the manifest files for their Kubernetes resources are stored.
+
+The advantage of this structure is that it allows us to use GitOps practices to manage and add components at any level
+of the hierarchy. For example, we could add a `team1-apps.yaml` file in the `argo-apps` directory to create another App
+of Apps structure specifically for **team1**, enabling the management of multiple teams' applications within the same
+GitOps framework.
+
+ℹ️ **Note:** Manifests do not have to reside in the same Git repository. **Team 1** could have a different repo for
+their apps.
+
 # Appendix
 
 ## Technical Background
