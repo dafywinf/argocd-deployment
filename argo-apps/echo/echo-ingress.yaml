@@ -8,7 +8,7 @@ spec:
   rules:
     - http:
         paths:
-          - path: /ingress
+          - path: /echo
             pathType: Prefix
             backend:
               service:

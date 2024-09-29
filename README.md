@@ -72,25 +72,40 @@ deployment and management of the ArgoCD application itself within a Kubernetes c
 
 ## Echo Example
 
-Create the namespace:
+Create Namespace and ArgoCD application:
 
 ```bash
 kubectl create namespace echo
+
+argocd app create echo --repo https://github.com/dafywinf/argocd-deployment.git \
+  --path argo-apps/echo --dest-server https://kubernetes.default.svc --dest-namespace echo \
+  --sync-policy auto
 ```
 
-Deploy the echo application:
+Delete ArgoCD application and Namespace:
 
 ```bash
-
-
+argocd app delete echo --yes
+kubectl delete namespace echo
 ```
 
-```bash
-argocd app delete echo
-```
+## Guestbook UI Example
+
+Create Namespace and ArgoCD application:
 
 ```bash
 kubectl create namespace guestbook
+
+argocd app create guestbook --repo https://github.com/dafywinf/argocd-deployment.git \
+  --path argo-apps/guestbook-ui --dest-server https://kubernetes.default.svc --dest-namespace guestbook \
+  --sync-policy auto
+```
+
+Delete ArgoCD application and Namespace:
+
+```bash
+argocd app delete guestbook --yes
+kubectl delete namespace guestbook
 ```
 
 # Appendix
