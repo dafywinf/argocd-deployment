@@ -70,7 +70,28 @@ deployment and management of the ArgoCD application itself within a Kubernetes c
 5. **Check the Rollout Status of ArgoCD Repository Server:** Lastly, the script monitors the rollout status of the
    ArgoCD repository server to ensure the deployment is complete and successful.
 
-###                      
+## Echo Example
+
+Create the namespace:
+
+```bash
+kubectl create namespace echo
+```
+
+Deploy the echo application:
+
+```bash
+
+
+```
+
+```bash
+argocd app delete echo
+```
+
+```bash
+kubectl create namespace guestbook
+```
 
 # Appendix
 
@@ -140,3 +161,4 @@ Ingress record will not work until the TLS secret exists.
 ## References
 
 * https://medium.com/@jojoooo/deploy-infra-stack-using-self-managed-argocd-with-cert-manager-externaldns-external-secrets-op-640fe8c1587b
+* https://medium.com/devopsturkiye/self-managed-argo-cd-app-of-everything-a226eb100cf0

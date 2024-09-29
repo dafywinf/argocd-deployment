@@ -19,13 +19,16 @@ verifyDependencies() {
 installArgoCD() {
   message ">>> deploying ArgoCD"
 
+
+# TODO: Re-add the --set applicationSet.enabled=false when we get ArgoCD self-management working again
+#     --set applicationSet.enabled=false \
+
   # Install chart
   helm repo add argo https://argoproj.github.io/argo-helm
   helm repo update
   helm uninstall $ARGO_APP_NAME --namespace=argocd
   helm install $ARGO_APP_NAME argo/argo-cd --create-namespace --namespace=argocd --version $ARGO_CHART_VERSION \
     --set fullnameOverride=argocd \
-    --set applicationSet.enabled=false \
     --set notifications.enabled=false \
     --set dex.enabled=false \
     --set configs.cm."kustomize\.buildOptions"="--load-restrictor LoadRestrictionsNone"
