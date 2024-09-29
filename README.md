@@ -91,7 +91,46 @@ kubectl delete namespace echo
 
 ## Guestbook UI Example
 
-Create Namespace and ArgoCD application:
+We have configured the Ingress for Guestbook UI to match paths beginning `/guestbook`. However, the Guestbook containers
+are running Apache2 to render the Guest Book web pages. Content is stored within the container in `/var/www/html`and
+the main page is `index.html`. However, we need to ensure that the path prefix `/guestbook` is stripped by the time the
+request reaches the pods. In Traefik, this can be done using Middleware, specifically the StripPrefix middleware, which
+strips part of the path before forwarding the request to the backend service.
+
+The following middleware is deployed:
+
+```bash
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: strip-prefix
+spec:
+  stripPrefix:
+    prefixes:
+      - "/guestbook-ui"
+```
+
+This middleware needs to be enabled on the ingress.
+
+```bash
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: guestbook-ui
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+
+    # NOTE: The middleware needs to be prefixed with namespace (guestbook) unless in default
+    traefik.ingress.kubernetes.io/router.middlewares: guestbook-strip-prefix@kubernetescrd
+...
+```
+
+‼️ It was quite challenging to get this to work. The key challenge is noted in the comment above. The
+middleware needs to be prefixed with the namespace it is deployed within. In this case the namespace is `guestbook`,
+therefore we have `guestbook-strip-prefix@kubernetescrd` to example middleware `strip-prefix`.
+
+To Create Namespace and ArgoCD application:
 
 ```bash
 kubectl create namespace guestbook
