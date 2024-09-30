@@ -1,0 +1,26 @@
+# https://argo-cd.readthedocs.io/en/stable/user-guide/application-specification/
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-logging-app
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    namespace: platform-kube-logging
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: https://github.com/dafywinf/kube-logging-helm
+    targetRevision: HEAD
+    path: .
+    type: helm
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    # Temporary turn-off syncing as insufficient resources
+    syncOptions: { }
+
+#    syncOptions:
+#      - CreateNamespace=true
