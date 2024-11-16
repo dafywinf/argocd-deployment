@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-world-deployment
+  name: {{ .Release.Name }}-hello-world-deployment
   namespace: {{ .Values.namespace }}
 spec:
   replicas: {{ .Values.replicaCount }}
@@ -18,3 +18,7 @@ spec:
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           ports:
             - containerPort: 80
+      volumes:
+        - name: nginx-content
+          configMap:
+            name: {{ .Release.Name }}-hello-world-nginx-content

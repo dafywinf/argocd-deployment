@@ -147,6 +147,20 @@ argocd app delete guestbook --yes
 kubectl delete namespace guestbook
 ```
 
+## Hello World CronJob Example
+
+Install:
+
+```bash
+helm upgrade hello-world-cron . --namespace hello-world-cron --create-namespace --install
+```
+
+Uninstall:
+
+```bash
+helm uninstall hello-world-cron --namespace hello-world-cron
+```
+
 ## App-of-Apps Example
 
 Deploys:

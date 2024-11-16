@@ -1,0 +1,5 @@
+apiVersion: v2
+name: echo
+description: A simple Helm chart that deploys a "Echo" application.
+version: 0.1.0
+appVersion: "1.0.0"

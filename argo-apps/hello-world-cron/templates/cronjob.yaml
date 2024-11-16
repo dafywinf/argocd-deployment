@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-hello-world-cron
+spec:
+  schedule: "{{ .Values.cronExpression }}"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: hello-world-cron
+              image: bitnami/kubectl:latest
+              command:
+                - /bin/sh
+                - -c
+                - sleep 60
+                - kubectl get pods -n "$KUBERNETES_NAMESPACE"
+              env:
+                - name: KUBERNETES_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
+          restartPolicy: Never

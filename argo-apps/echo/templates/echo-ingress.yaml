@@ -6,7 +6,8 @@ metadata:
     ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   rules:
-    - http:
+    - host: {{ .Values.domainName }}
+      http:
         paths:
           - path: /echo
             pathType: Prefix
