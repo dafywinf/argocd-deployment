@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: postgresql-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://charts.bitnami.com/bitnami
+    targetRevision: "*" # Optional if you want to use the latest version
+    chart: postgresql
+    helm:
+      valueFiles: [ ] # Optional if you store a custom values.yaml in a repo
+      parameters: # Inline parameters override default values.yaml
+        - name: global.postgresql.auth.username
+          value: appuser
+        - name: global.postgresql.auth.password
+          value: password123
+        - name: global.postgresql.auth.database
+          value: appdb
+        - name: persistence.size
+          value: 10Gi
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: postgresql
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

@@ -1,0 +1,14 @@
+replicaCount: 1
+
+image:
+  repository: dafywinf/hello-world
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+namespace: hello-world-spring
+
+domainName: www.dafydd-winfield.uk

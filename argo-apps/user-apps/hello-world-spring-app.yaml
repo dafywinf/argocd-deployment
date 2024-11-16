@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hello-world-spring-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/dafywinf/argocd-deployment
+    targetRevision: HEAD
+    path: argo-apps/hello-world-spring
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: hello-world-spring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
